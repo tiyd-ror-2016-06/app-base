@@ -24,4 +24,5 @@ You may need to fiddle around with remotes assuming that you don't want to push 
 │   ├── migrate         # Folder containing generated migrations
 │   └── setup.rb        # `require`ing this file sets up the db connection
 └── lib                 # Your ruby code (models, etc.) should go here
+    └── all.rb          # Require this file to auto-require _all_ `.rb` files in `lib`
 ```

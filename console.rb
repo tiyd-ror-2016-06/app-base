@@ -1,5 +1,5 @@
 require "pry"
 require "./db/setup"
-Dir["./lib/**/*.rb"].each { |path| require path }
+require "./lib/all"
 
 binding.pry
