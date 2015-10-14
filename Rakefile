@@ -22,7 +22,11 @@ end
 desc "Generate migration"
 namespace :generate do
   task :migration do |name|
-    name = ARGV.pop
+    _, name = ARGV
+    unless name
+      puts "You must name your migration (CasedLikeThis)"
+      exit 1
+    end
     timenumber = Time.now.strftime "%Y%m%d%H%M%S"
     file = "db/migrate/#{timenumber}_#{name.snake_case}.rb"
 
