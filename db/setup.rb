@@ -16,4 +16,4 @@ if LOG
 end
 
 raise "Could not find database config for environment" unless env_config
-ActiveRecord::Base.establish_connection(env_config)
+ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"] || env_config)
