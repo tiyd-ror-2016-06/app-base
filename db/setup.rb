@@ -1,8 +1,6 @@
 require 'active_record'
 require 'yaml'
 
-LOG = true
-
 db_config = YAML::load(File.open('config/database.yml'))
 
 env_config = if ENV["TEST"]
@@ -11,7 +9,7 @@ else
   db_config["development"]
 end
 
-if LOG
+if ENV["LOG"]
   ActiveRecord::Base.logger = Logger.new(STDOUT)
 end
 
