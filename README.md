@@ -26,3 +26,45 @@ You may need to fiddle around with remotes assuming that you don't want to push 
 └── lib                 # Your ruby code (models, etc.) should go here
     └── all.rb          # Require this file to auto-require _all_ `.rb` files in `lib`
 ```
+
+
+## Hangman
+
+### Features
+
+- Records high scores
+    - username
+    - date
+    - score
+        - tries
+        - word
+        - letters_guessed
+        - hints
+        - game_over
+
+- Saves the game state
+
+### Data Model
+
+#### User Table ####
+
+    - username
+
+#### Games Table
+
+    - user_id
+    - tries_allowed
+    - tries_remaining
+    - letters_guessed
+    - hints
+
+#### High Scores Table
+
+- Select from Games and Users Table
+
+    - username
+    - score
+
+#### Wins and Losses Table
+
+- Select from Games and Users Table
