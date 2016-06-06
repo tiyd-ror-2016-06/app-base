@@ -2,11 +2,15 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'pry'
-gem 'minitest'
-gem 'did_you_mean'
+gem 'sinatra', require: false
+gem 'sinatra-contrib'
 
 group :development do
   gem 'sqlite3'
+  gem 'minitest'
+  gem 'minitest-focus'
+  gem 'minitest-reporters'
+  gem 'rack-test'
 end
 
 group :production do
