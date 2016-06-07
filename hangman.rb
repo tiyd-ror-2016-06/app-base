@@ -36,8 +36,29 @@ class Game
     @tries_remaining    = tries_remaining
     @hints_allowed      = hints_allowed
     @hints_remaining    = hints_remaining
+    @correct_guesses    = "_" * word.length
 
-    #@letters_guessed    = []
+    def over?
+      @tries_remaining == 0 || word_is_found?
+    end
+
+    def word_is_found?
+      @word == @correct_guesses
+    end
+
+    def print_board(revealed:)
+      @word.split("").reduce 0 do | accum, letter|
+        if revealed
+          print letter
+        else
+          print @correct_guesses[accum]
+        end
+        print " "
+        accum += 1
+      end
+      print "\n"
+    end
+
   end
 end
 
@@ -179,16 +200,16 @@ def new_game word_bank, game_options
   until g.over?
     print_title
     g.print_board   revealed: false
+    binding.pry
     g.print_status
     g.print_options
     g.prompt_user
   end
-
-  #print_title
+  print_title
   g.print_board     revealed: true
   g.print_outcome
   g.save
-  play_again? && new_game
+  #play_again?
 end
 
 
