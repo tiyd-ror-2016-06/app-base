@@ -28,80 +28,76 @@ end
 allowed_chars = ("a".."z").to_a
 
 class Game
-  def initialize word:, tries_allowed:, tries_remaining:, hints_allowed:, hints_remaining:
-
+  def initialize(word:, tries_allowed:, tries_remaining:, hints_allowed:, hints_remaining:)
     @word               = word
-#    @user               = user
     @tries_allowed      = tries_allowed
     @tries_remaining    = tries_remaining
     @hints_allowed      = hints_allowed
     @hints_remaining    = hints_remaining
     @correct_guesses    = "_" * word.length
     @all_guesses        = []
-
-    def over?
-      @tries_remaining == 0 || word_is_found?
-    end
-
-    def word_is_found?
-      x = @word.split("").select { |letter| not @all_guesses.include? letter }
-      x.empty?
-    end
-
-    def print_board(reveal_answers:)
-      @word.split("").each do | letter |
-        if reveal_answers || (@all_guesses.include? letter)
-          print letter
-        else
-          print "_"
-        end
-        print " "
-      end
-      print "\n"
-    end
-
-    def print_status
-      puts
-      puts "#{@tries_remaining} guesses left"
-      puts "#{@hints_remaining} left"
-      puts
-    end
-
-    def print_options
-      print "What is your guess? (Enter '?' for a hint; CTRL + C to quit)"
-    end
-
-    def prompt_user
-      guess = gets.chomp.to_s.downcase
-      if guess == @word
-        amazing_guess
-      elsif guess == "?"
-        get_a_hint ||
-          "You have no more hints!"
-        sleep 1
-      elsif @all_guesses.include? guess
-        puts "You've already guessed that."
-        sleep 1
-      elsif not ("a".."z").include? guess
-        puts "That is not a valid character."
-        sleep 1
-      else
-        @all_guesses.push guess
-        @tries_remaining -= 1
-      end
-    end
-
-    def print_outcome
-      if word_is_found?
-        puts "Good job! You've won!"
-      else
-        puts "You've lost. Better luck next time..."
-      end
-    end
-
-
-
   end
+
+  def over?
+    @tries_remaining == 0 || word_is_found?
+  end
+
+  def word_is_found?
+    x = @word.split("").select { |letter| not @all_guesses.include? letter }
+    x.empty?
+  end
+
+  def print_board(reveal_answers:)
+    @word.split("").each do | letter |
+      if reveal_answers || (@all_guesses.include? letter)
+        print letter
+      else
+        print "_"
+      end
+      print " "
+    end
+    print "\n"
+  end
+
+  def print_status
+    puts
+    puts "#{@tries_remaining} guesses left"
+    puts "#{@hints_remaining} left"
+    puts
+  end
+
+  def print_options
+    print "What is your guess? (Enter '?' for a hint; CTRL + C to quit)"
+  end
+
+  def prompt_user
+    guess = gets.chomp.to_s.downcase
+    if guess == @word
+      amazing_guess
+    elsif guess == "?"
+      get_a_hint ||
+        "You have no more hints!"
+      sleep 1
+    elsif @all_guesses.include? guess
+      puts "You've already guessed that."
+      sleep 1
+    elsif not ("a".."z").include? guess
+      puts "That is not a valid character."
+      sleep 1
+    else
+      @all_guesses.push guess
+      @tries_remaining -= 1
+    end
+  end
+
+  def print_outcome
+    if word_is_found?
+      puts "Good job! You've won!"
+    else
+      puts "You've lost. Better luck next time..."
+    end
+  end
+
 end
 
 def play_again?
@@ -222,12 +218,6 @@ def view_scores
   gets
 end
 
-
-# Preliminary Stuff
-
-
-#sorted_letters = get_letter_freq_ascending(valid_words)
-
 def new_game word_bank, game_options
 
   g = Game.new word: word_bank.sample, **(game_options)
@@ -243,7 +233,6 @@ def new_game word_bank, game_options
   g.print_board     reveal_answers: true
   g.print_outcome
   g.save
-  #play_again?
 end
 
 
@@ -267,6 +256,7 @@ loop do
 
     rescue Interrupt
       puts "Returning to Main Menu..."
+      sleep 1
       next
     end
   end
