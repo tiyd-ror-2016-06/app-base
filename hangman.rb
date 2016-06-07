@@ -3,37 +3,43 @@
 require "pry"
 require "./db/setup"
 require "./lib/all"
-valid_words = []
-guess_list = []
-allowed_chars = ("a".."z").to_a
+require "./word_bank"
 
-def load_words (file, min, max)
+default_word_bank = "/usr/share/dict/words"
 
-  # load in words from file that are of lengths between min and max
-  print "Loading words ...\n"
+#default_difficulty = :easy
 
-  File.open(file, "r").map  { |x| x.chomp }.select do |line|
-      line.length <= max && line.length >= min
-  end
+game_options = {
+    tries_allowed:      5,
+    tries_remaining:    5,
+    hints_allowed:      3,
+    hints_remaining:    3,
+    letters_guessed:    []
+}
+
+word_bank_options = {
+    min_word_length: 6,
+    max_word_length: 10
+}
+
+def clear_screen
+  system("clear")
 end
 
-def get_letter_freq_ascending(lines)
+allowed_chars = ("a".."z").to_a
 
-  # returns a hash with frequency of each letter in ascending order
+class Game
+  def initialize word:, tries_allowed:, tries_remaining:, hints_allowed:
+    @word               = word
+    @user               = user
+    @tries_allowed      = tries_allowed
+    @tries_remaining    = tries_remaining
 
-  h = ("a".."z").map { |x| [x,0] }.to_h
+    #@hints_allowed      = hints_allowed
+    #@hints_remaining    = hints_remaining
 
-  lines.each do |item|
-    item.split("").each do |letter|
-      letter.downcase!
-      h.include? letter && h[letter] += 1
-    end
+    #@letters_guessed    = []
   end
-
-  h = h.sort_by { |a, b| b }
-  h = h.map { |a,b| a }
-
-  return h
 end
 
 def play_again?
@@ -84,21 +90,21 @@ def print_end_msg(letters, win)
 
 end
 
-def print_screen(guesses_allowed, hints, correct_guesses)
+def print_title #(guesses_allowed, hints, correct_guesses)
 
   system ("clear")
 
   puts "H A N G M A N"
   puts
 
-  print_score correct_guesses
+#  print_score correct_guesses
 
-  puts ""
-  puts ""
-  puts "#{guesses_allowed} guesses left"
-  puts "#{hints} hints left"
-  puts
-  print "What is your guess? (Enter '?' for a hint) "
+#  puts ""
+#  puts ""
+#  puts "#{guesses_allowed} guesses left"
+#  puts "#{hints} hints left"
+#  puts
+#  print "What is your guess? (Enter '?' for a hint) "
 
 end
 
@@ -106,10 +112,6 @@ def print_options options_hash
   options_hash.each do |k,v|
     puts k + ". " + v
   end
-end
-
-def clear_screen
-  system("clear")
 end
 
 def main_menu
@@ -168,11 +170,30 @@ end
 
 # Preliminary Stuff
 
-min_word_length = 6
-max_word_length = 10
 
-valid_words = load_words("/usr/share/dict/words", min_word_length, max_word_length)
-sorted_letters = get_letter_freq_ascending(valid_words)
+#sorted_letters = get_letter_freq_ascending(valid_words)
+
+def new_game word_bank
+  binding.pry
+  g = Game.new word: w.sample
+
+  binding.pry
+
+  until g.over?
+    print_title
+    g.print_board   revealed: false
+    g.print_status
+    g.print_options
+    g.prompt_user
+  end
+
+  #print_title
+  g.print_board     revealed: true
+  g.print_outcome
+  g.save
+  play_again? && new_game
+end
+
 
 # Main program
 
@@ -185,13 +206,22 @@ loop do
   when "View Scores"
     view_scores
   when "New Game"
-    puts "New Game Here"
+    begin
+      w = WordBank.new(
+        source: default_word_bank,
+        min: word_bank_options[:min_word_length],
+        max: word_bank_options[:max_word_length]
+      )
+      new_game w
+
+    rescue Interrupt
+      puts "Returning to Main Menu..."
+      next
+    end
   end
 end
 
 exit
-
-
 game_on = true
 
 while game_on
