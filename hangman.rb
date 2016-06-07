@@ -7,6 +7,12 @@ require "./word_bank"
 
 default_word_bank = "/usr/share/dict/words"
 
+longstring = "asdasfdasdfad"
+
+def less_for_ruby text
+  IO.popen("less", "w") { |f| f.puts text }
+end
+
 #default_difficulty = :easy
 
 game_options = {
@@ -119,8 +125,8 @@ def new_game word_bank, game_options
   print_title
   g.print_board     reveal_answers: true
   g.print_outcome
-  binding.pry
-  g.save_game
+  username || = log_in_user
+  g.save_game username
 end
 
 # Main program

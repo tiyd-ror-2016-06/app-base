@@ -6,7 +6,6 @@ class Game < ActiveRecord::Base
     @tries_remaining    = tries_remaining
     @hints_allowed      = hints_allowed
     @hints_remaining    = hints_remaining
-    @correct_guesses    = "_" * word.length
     @all_guesses        = []
   end
 
@@ -68,6 +67,21 @@ class Game < ActiveRecord::Base
     else
       puts "You've lost. Better luck next time..."
     end
+    puts
+    print "Press enter to continue... "
+  end
+
+  def save_game user_id
+      self.tries_allowed    = @tries_allowed,
+      self.tries_remaining  = @tries_remaining,
+      self.hints_allowed    = @hints_allowed,
+      self.hints_remaining  = @hints_remaining,
+      self.word             = @word,
+      self.letters_guessed  = @all_guesses.join(","),
+      self.user_id  = user_id
+
+      self.save
+      binding.pry
   end
 
 end
