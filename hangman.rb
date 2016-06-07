@@ -80,7 +80,7 @@ class Game
           "You have no more hints!"
         sleep 1
       elsif @all_guesses.include? guess
-        puts "You already guessed that."
+        puts "You've already guessed that."
         sleep 1
       elsif not ("a".."z").include? guess
         puts "That is not a valid character."
@@ -91,6 +91,13 @@ class Game
       end
     end
 
+    def print_outcome
+      if word_is_found?
+        puts "Good job! You've won!"
+      else
+        puts "You've lost. Better luck next time..."
+      end
+    end
 
 
 
