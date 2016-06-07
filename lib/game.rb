@@ -7,6 +7,7 @@ class Game < ActiveRecord::Base
     @hints_allowed      = hints_allowed
     @hints_remaining    = hints_remaining
     @all_guesses        = []
+    binding.pry
   end
 
   def over?
@@ -38,7 +39,7 @@ class Game < ActiveRecord::Base
   end
 
   def print_options
-    print "What is your guess? (Enter '?' for a hint; CTRL + C to quit)"
+    print "What is your guess? (Enter '?' for a hint; CTRL + C to quit) "
   end
 
   def prompt_user
@@ -72,16 +73,16 @@ class Game < ActiveRecord::Base
   end
 
   def save_game user_id
-      self.tries_allowed    = @tries_allowed,
-      self.tries_remaining  = @tries_remaining,
-      self.hints_allowed    = @hints_allowed,
-      self.hints_remaining  = @hints_remaining,
-      self.word             = @word,
-      self.letters_guessed  = @all_guesses.join(","),
-      self.user_id  = user_id
+    self.tries_allowed    = @tries_allowed,
+    self.tries_remaining  = @tries_remaining,
+    self.hints_allowed    = @hints_allowed,
+    self.hints_remaining  = @hints_remaining,
+    self.word             = @word,
+    self.letters_guessed  = @all_guesses.join(","),
+    self.user_id  = user_id
 
-      self.save
-      binding.pry
+    self.save
+    binding.pry
   end
 
 end

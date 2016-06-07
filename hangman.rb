@@ -131,6 +131,7 @@ def new_game word_bank, game_options, user
   g.print_outcome
   binding.pry
   g.save_game user.id
+  binding.pry
 end
 
 def load_or_create_user username
@@ -144,8 +145,9 @@ end
 
 # Main program
 
+user = log_in_user
+
 loop do
-  user ||= log_in_user
   case main_menu
   when "Exit"
     break
@@ -157,7 +159,6 @@ loop do
         source: default_word_bank, **(wordbank_options)
       )
 
-      binding.pry
       new_game w, game_options, user
 
     rescue Interrupt
