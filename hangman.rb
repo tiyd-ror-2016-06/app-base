@@ -60,9 +60,8 @@ def main_menu
   response = nil
   options = {
     "1"     => "New Game",
-    "2"     => "Log In",
-    "3"     => "View Scores",
-    "4"     => "Exit"
+    "2"     => "View Scores",
+    "3"     => "Exit"
   }
   until options.include? response
     system("clear")
@@ -76,8 +75,13 @@ def main_menu
 end
 
 def log_in_user
-  print "Enter your name (Press enter to skip): "
-  gets.chomp
+  username = nil
+  until (username =~ /\A[A-Za-z]+\z/ || username =~ /^$/)
+    puts "Enter your name (Press enter to skip): "
+    username = gets.chomp
+  end
+  username =~ /^$/ && username = "nobody"
+  load_or_create_user username
 end
 
 def get_high_scores
@@ -111,7 +115,7 @@ def view_scores
   gets
 end
 
-def new_game word_bank, game_options
+def new_game word_bank, game_options, user
 
   g = Game.new word: word_bank.sample, **(game_options)
 
@@ -125,18 +129,26 @@ def new_game word_bank, game_options
   print_title
   g.print_board     reveal_answers: true
   g.print_outcome
-  username || = log_in_user
-  g.save_game username
+  binding.pry
+  g.save_game user.id
+end
+
+def load_or_create_user username
+  unless u = User.where(name: username).first
+    u = User.new
+    u.name = username
+    u.save
+  end
+  u
 end
 
 # Main program
 
 loop do
+  user ||= log_in_user
   case main_menu
   when "Exit"
     break
-  when "Log In"
-    username = log_in_user
   when "View Scores"
     view_scores
   when "New Game"
@@ -145,7 +157,8 @@ loop do
         source: default_word_bank, **(wordbank_options)
       )
 
-      new_game w, game_options
+      binding.pry
+      new_game w, game_options, user
 
     rescue Interrupt
       puts "Returning to Main Menu..."
