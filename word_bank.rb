@@ -1,8 +1,8 @@
 class WordBank
-  def initialize source:, min:, max:
+  def initialize source:, min_word_length:, max_word_length:
     @source = source
-    @min = min
-    @max = max
+    @min = min_word_length
+    @max = max_word_length
     @valid_words = load_words
     @letter_frequencies = nil
   end

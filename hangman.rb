@@ -14,10 +14,9 @@ game_options = {
     tries_remaining:    5,
     hints_allowed:      3,
     hints_remaining:    3,
-    letters_guessed:    []
 }
 
-word_bank_options = {
+wordbank_options = {
     min_word_length: 6,
     max_word_length: 10
 }
@@ -29,14 +28,14 @@ end
 allowed_chars = ("a".."z").to_a
 
 class Game
-  def initialize word:, tries_allowed:, tries_remaining:, hints_allowed:
+  def initialize word:, tries_allowed:, tries_remaining:, hints_allowed:, hints_remaining:
+
     @word               = word
-    @user               = user
+#    @user               = user
     @tries_allowed      = tries_allowed
     @tries_remaining    = tries_remaining
-
-    #@hints_allowed      = hints_allowed
-    #@hints_remaining    = hints_remaining
+    @hints_allowed      = hints_allowed
+    @hints_remaining    = hints_remaining
 
     #@letters_guessed    = []
   end
@@ -173,11 +172,9 @@ end
 
 #sorted_letters = get_letter_freq_ascending(valid_words)
 
-def new_game word_bank
-  binding.pry
-  g = Game.new word: w.sample
+def new_game word_bank, game_options
 
-  binding.pry
+  g = Game.new word: word_bank.sample, **(game_options)
 
   until g.over?
     print_title
@@ -208,11 +205,10 @@ loop do
   when "New Game"
     begin
       w = WordBank.new(
-        source: default_word_bank,
-        min: word_bank_options[:min_word_length],
-        max: word_bank_options[:max_word_length]
+        source: default_word_bank, **(wordbank_options)
       )
-      new_game w
+
+      new_game w, game_options
 
     rescue Interrupt
       puts "Returning to Main Menu..."
