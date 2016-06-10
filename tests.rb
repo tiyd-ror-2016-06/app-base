@@ -1,3 +1,5 @@
+ENV["TEST"] = "true"
+
 require 'pry'
 require 'minitest/autorun'
 require 'minitest/focus'
